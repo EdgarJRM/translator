@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">traslator</string>
+
+    <string name="Et_Idiom_Origen">Ingrese Texto</string>
+    <string name="Tv_desty">traslation</string>
+    <string name="Btb_Idiom_choise">Spanish</string>
+    <string name="Btb_Idiom_select">English</string>
+    <string name="Btn_Traslator">Traslator</string>
+</resources>
