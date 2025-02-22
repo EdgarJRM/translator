@@ -1,5 +1,6 @@
 package com.edgarjrm.traslator
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,10 @@ import android.view.Menu
 import android.widget.PopupMenu
 import com.google.android.material.button.MaterialButton
 import android.app.ProgressDialog
+import android.speech.RecognizerIntent
+import android.content.ActivityNotFoundException
+import android.speech.SpeechRecognizer
+import android.speech.RecognitionListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var Btn_Idiom_choise:MaterialButton
     lateinit var Btn_Traslator:MaterialButton
     private lateinit var progressDialog: ProgressDialog
+    lateinit var Btn_VoiceRecognition: MaterialButton // Declaramos el botón de reconocimiento de voz
 
     private lateinit var languageArrayList: ArrayList<Language>  // Cambié el nombre a 'Language'
     private val RECORDS = "My records"
@@ -51,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         Btn_Idiom_select = findViewById(R.id.Btb_Idiom_select)
         Btn_Idiom_choise = findViewById(R.id.Btb_Idiom_choise)
         Btn_Traslator = findViewById(R.id.Btn_Traslator)
+        Btn_VoiceRecognition = findViewById(R.id.Btn_VoiceRecognition)
 
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
@@ -70,6 +77,11 @@ class MainActivity : AppCompatActivity() {
         Btn_Traslator.setOnClickListener {
             //Toast.makeText(this, "Traducir", Toast.LENGTH_SHORT).show()
             ValidateData()
+        }
+
+        // Llamamos al método cuando se haga clic en el botón
+        Btn_VoiceRecognition.setOnClickListener {
+            startVoiceRecognition()
         }
     }
 
@@ -197,6 +209,38 @@ class MainActivity : AppCompatActivity() {
                 Log.d(RECORDS, "onFailure: $e")
                 Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun startVoiceRecognition() {
+        // Crear un intent para el reconocimiento de voz
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Habla ahora para traducir")
+
+        try {
+            // Iniciar la actividad para el reconocimiento de voz
+            startActivityForResult(intent, REQUEST_CODE_VOICE_RECOGNITION)
+        } catch (e: ActivityNotFoundException) {
+            // Si no está disponible el reconocimiento de voz en el dispositivo
+            Toast.makeText(this, "Reconocimiento de voz no disponible", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Resultados del reconocimiento de voz
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_VOICE_RECOGNITION && resultCode == RESULT_OK) {
+            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            if (!result.isNullOrEmpty()) {
+                val recognizedText = result[0]
+                Et_Idiom_Origen.setText(recognizedText)  // Coloca el texto reconocido en el EditText
+                ValidateData()  // Llama al método para traducir el texto
+            }
+        }
+    }
+
+    companion object {
+        private const val REQUEST_CODE_VOICE_RECOGNITION = 1001
     }
     data class Language(val codeLanguage: String, val titleLanguage: String)
 }

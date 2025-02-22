@@ -41,6 +41,13 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold|italic"
                 android:textSize="18sp"/>
+            <Button
+                android:id="@+id/Btn_VoiceRecognition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dictar"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"/>
         </LinearLayout>
     </ScrollView>
 
@@ -84,6 +91,5 @@
         android:layout_height="wrap_content"
         app:cornerRadius="10dp"
         app:icon="@drawable/ic_traduction"/>
-
 
 </RelativeLayout>
