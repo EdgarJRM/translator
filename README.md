@@ -18,8 +18,8 @@ Kotlin
 * [Kotlin Course from Scratch](https://platzi.com/cursos/kotlin/)
 
 # Future Work
-* Implement select translation language
 * Implement language detection
-* I want to improve it so that it can have the option to dictate the text by voice.
-* Later I will make the voice translation direct
 * I want to implement the conversation option so that two people can converse
+* Add an icon
+* App home screen
+* Possibly a menu or at least a close button
